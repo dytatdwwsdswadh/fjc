@@ -20,22 +20,20 @@ const Home = () => {
   const [noClicked, setNoClicked] = useState(false)
   const [noButtonPosition, setNoButtonPosition] = useState({ top: 0, left: 0 })
   
-  // New state to control the "Yes" button scale
+  // State to control the "Yes" button scale
   const [yesScale, setYesScale] = useState(1)
   
-  // New state to show the Wheel view
+  // State to show the Wheel view
   const [showWheel, setShowWheel] = useState(false)
 
   // When "No" is clicked: reposition it anywhere within the viewport and enlarge the Yes button.
   const handleNoClick = () => {
-    // Adjust these button dimensions if needed to prevent overflowing the viewport.
     const buttonWidth = 120
     const buttonHeight = 50
     const newLeft = Math.floor(Math.random() * (window.innerWidth - buttonWidth))
     const newTop = Math.floor(Math.random() * (window.innerHeight - buttonHeight))
     setNoButtonPosition({ top: newTop, left: newLeft })
     setNoClicked(true)
-    // Increase the Yes button's scale to encourage clicking it.
     setYesScale(prev => prev + 0.2)
   }
 
@@ -76,6 +74,10 @@ const Home = () => {
     { text: "anyways...", image: "catalright.jpg"},
     { text: "valentine's day isn't about the gift, it's about the love", image: "catnerd.png"},
     { text: "and guess what...", image: "el gato.webp"},
+    { text: "through the quiet moments...", image: "quiet.jpg"},
+    { text: "and the loud ones...", image: "loud.jpg"},
+    { text: "you're always there for me", image: "hold.jpg"},
+    { text: "so happy valentines day!", image: "last.jpg"},
     { text: "i love you :)", image: "love.jpg"},
   ]
 
@@ -105,7 +107,7 @@ const Home = () => {
     return <Password onAuthenticated={setAuthenticated} />
   }
 
-  // If the wheel mode is active, show the Wheel component.
+  // If wheel mode is active, show the Wheel component.
   if (showWheel) {
     return (
       <div className={`${pixelifySans.className} min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-100 to-red-100`}>
@@ -119,7 +121,9 @@ const Home = () => {
     )
   }
 
+  // Determine if the current text is the Valentine question and if it's the last element.
   const isValentineQuestion = content[textIndex].text === "do you want to be my valentine?"
+  const isLastElement = textIndex === content.length - 1
 
   return (
     <div className={`${pixelifySans.className} min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-100 to-red-100`}>
@@ -163,34 +167,37 @@ const Home = () => {
               </button>
             </div>
           ) : (
-            <div className="flex gap-2">
-              <button 
-                className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-all duration-200 transform hover:scale-105 shadow-md disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-pink-500 text-xl"
-                onClick={() => {
-                  setTextIndex((prev) => (prev - 1 + content.length) % content.length)
-                  setYesScale(1)
-                  setNoClicked(false)
-                }}
-                disabled={textIndex === 0}
-              >
-                ←
-              </button>
-              <button 
-                className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-all duration-200 transform hover:scale-105 shadow-md text-xl"
-                onClick={() => {
-                  // if we are on the "SPIN THE WHEEL OF FORTUNE!!!" text, show the wheel instead of advancing text.
-                  if (content[textIndex].text === "SPIN THE WHEEL OF FORTUNE!!!") {
-                    setShowWheel(true)
-                  } else {
-                    setTextIndex((prev) => (prev + 1) % content.length)
+            // Only render the arrow buttons if we are not at the last element.
+            !isLastElement && (
+              <div className="flex gap-2">
+                <button 
+                  className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-all duration-200 transform hover:scale-105 shadow-md disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-pink-500 text-xl"
+                  onClick={() => {
+                    setTextIndex((prev) => (prev - 1 + content.length) % content.length)
                     setYesScale(1)
                     setNoClicked(false)
-                  }
-                }}
-              >
-                →
-              </button>
-            </div>
+                  }}
+                  disabled={textIndex === 0}
+                >
+                  ←
+                </button>
+                <button 
+                  className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-all duration-200 transform hover:scale-105 shadow-md text-xl"
+                  onClick={() => {
+                    // if we are on the "SPIN THE WHEEL OF FORTUNE!!!" text, show the wheel instead of advancing text.
+                    if (content[textIndex].text === "SPIN THE WHEEL OF FORTUNE!!!") {
+                      setShowWheel(true)
+                    } else {
+                      setTextIndex((prev) => (prev + 1) % content.length)
+                      setYesScale(1)
+                      setNoClicked(false)
+                    }
+                  }}
+                >
+                  →
+                </button>
+              </div>
+            )
           )}
         </div>
       </div>
