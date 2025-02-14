@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function Wheel() {
+function Wheel({ onNext }) {
   // List of gifts (feel free to add/remove for a "lot of gifts" effect)
   const gifts = [
     "A Million Dollars",
@@ -23,21 +23,23 @@ function Wheel() {
 
   // Removed randomization: always spin with fixed extra rotations and land at the same normalized angle.
   const spinWheel = () => {
-    if (spinning) return
+    // Prevent additional spins if already spinning or after a spin has been completed.
+    if (spinning || selectedGift) return
+
     setSelectedGift(null)
     setSpinning(true)
-    const spins = 5; // fixed number of full rotations for a nice animation
-    const targetOffset = 350; // constant final normalized rotation (degrees) for a consistent outcome
-    const currentNormalized = rotation % 360;
-    let delta = targetOffset - currentNormalized;
+    const spins = 5 // fixed number of full rotations for a nice animation
+    const targetOffset = 350 // constant final normalized rotation (degrees) for a consistent outcome
+    const currentNormalized = rotation % 360
+    let delta = targetOffset - currentNormalized
     if (delta < 0) {
-      delta += 360;
+      delta += 360
     }
     // If already at target, force at least one extra full spin.
     if (delta === 0) {
-      delta = 360;
+      delta = 360
     }
-    const finalRotation = rotation + spins * 360 + delta;
+    const finalRotation = rotation + spins * 360 + delta
     setRotation(finalRotation)
   }
 
@@ -51,10 +53,17 @@ function Wheel() {
     setSpinning(false)
   }
 
+  // Handler for "Next" button click. We call the parent's callback if available.
+  const handleNext = () => {
+    if (onNext) {
+      onNext()
+    }
+  }
+
   // Build the wheel using SVG.
   const wheelSize = 500
   const center = wheelSize / 2
-  const radius = center - 10 // add some padding
+  const radius = center - 10  // add some padding
   const slices = gifts.map((gift, index) => {
     const startAngle = (index * 2 * Math.PI) / gifts.length
     const endAngle = ((index + 1) * 2 * Math.PI) / gifts.length
@@ -77,6 +86,14 @@ function Wheel() {
   const wheelStyle = {
     transform: `rotate(${rotation}deg)`,
     transition: spinning ? 'transform 4s ease-out' : 'none'
+  }
+
+  // Determine the text to display on the button
+  let buttonText = "Spin"
+  if (spinning) {
+    buttonText = "Spinning..."
+  } else if (selectedGift) {
+    buttonText = "  →"
   }
 
   return (
@@ -112,13 +129,13 @@ function Wheel() {
             const angleInDegrees = (angleInRadians * 180) / Math.PI
             
             // Original baseline rotation for text:
-            let rotation = angleInDegrees + 90
+            let rotationAngle = angleInDegrees + 90
             // Flip text if needed to keep it upright:
-            if (rotation > 90 && rotation < 270) {
-              rotation += 180
+            if (rotationAngle > 90 && rotationAngle < 270) {
+              rotationAngle += 180
             }
-            // Apply extra 90° rotation *afterward*:
-            const finalRotation = rotation + 90
+            // Apply extra 90° rotation afterward:
+            const finalRotation = rotationAngle + 90
 
             return (
               <text 
@@ -138,11 +155,11 @@ function Wheel() {
         </svg>
       </div>
       <button
-        onClick={spinWheel}
+        onClick={selectedGift ? handleNext : spinWheel}
         disabled={spinning}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg transition-all duration-200 hover:bg-blue-600"
+        className="mt-4 px-4 py-2 bg-pink-500 text-white rounded-lg shadow-lg transition-all duration-200 hover:bg-pink-600"
       >
-        {spinning ? "Spinning..." : "Spin"}
+        {buttonText}
       </button>
       {selectedGift && (
         <div className="mt-4 text-xl">

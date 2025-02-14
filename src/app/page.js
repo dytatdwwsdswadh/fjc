@@ -63,13 +63,20 @@ const Home = () => {
     { text: "a car (i dont trust you to drive)", image: "catcar.jpg" },
     { text: "now, here are some things that i WILL be giving you:", image: "catexcited.jpg" },
     { text: "my presence (the greatest present)", image: "catcutie.jpg"},
-    { text: "food (i can tell you you like to eat)", image: "fatcat.gif"},
+    { text: "food (i can tell you like to eat)", image: "fatcat.gif"},
     { text: "flowers (because society told me to)", image: "catflowers2.jpg"},
     { text: "now, you may be a bit disappointed...", image: "catdisappointed.png" },
     { text: "BUT WAIT!", image: "catsurprised1.jpg" },
     { text: "I'M NOT DONE YET!!", image: "catsurprised2.gif" },
     { text: "because now you get to...", image: "catwow.jpg" },
-    { text: "SPIN THE WHEEL OF FORTUNE!!!", image: "catjumping.gif"}
+    { text: "SPIN THE WHEEL OF FORTUNE!!!", image: "catjumping.gif"},
+    { text: "you got an entire gallon of baja blast!!!", image: "catexcited2.gif"},
+    { text: "of course, you aren't gonna drink all that...", image: "catsmile.jpg"},
+    { text: "right?", image: "catsideye2.jpg"},
+    { text: "anyways...", image: "catalright.jpg"},
+    { text: "valentine's day isn't about the gift, it's about the love", image: "catnerd.png"},
+    { text: "and guess what...", image: "el gato.webp"},
+    { text: "i love you :)", image: "love.jpg"},
   ]
 
   // Add typing effect function
@@ -102,7 +109,12 @@ const Home = () => {
   if (showWheel) {
     return (
       <div className={`${pixelifySans.className} min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-100 to-red-100`}>
-        <Wheel />
+        <Wheel 
+          onNext={() => {
+            setShowWheel(false)
+            setTextIndex((prev) => (prev + 1) % content.length)
+          }}
+        />
       </div>
     )
   }
