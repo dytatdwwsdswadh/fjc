@@ -60,9 +60,10 @@ const Home = () => {
     { text: "peanuts (you would probably die)", image: "catpeanut.jpg" },
     { text: "a car (i dont trust you to drive)", image: "catcar.jpg" },
     { text: "now, here are some things that i WILL be giving you:", image: "catexcited.jpg" },
-    { text: "my presence (the greatest present)", image: "catcutie.jpg"},
     { text: "food (i can tell you like to eat)", image: "fatcat.gif"},
     { text: "flowers (because society told me to)", image: "catflowers2.jpg"},
+    { text: "and, best of all...", image: "catveryexcited.jpg"},
+    { text: "me! (my presence is a present)", image: "catcutie.jpg"},
     { text: "now, you may be a bit disappointed...", image: "catdisappointed.png" },
     { text: "BUT WAIT!", image: "catsurprised1.jpg" },
     { text: "I'M NOT DONE YET!!", image: "catsurprised2.gif" },
@@ -135,7 +136,7 @@ const Home = () => {
             className="w-64 h-64 object-cover rounded-lg shadow-lg"
           />
         )}
-        <p className="text-3xl text-pink-500 mb-2">
+        <p className="text-3xl text-pink-500 mb-2 text-center">
           {typedText}
           {isTyping && <span className="animate-pulse">|</span>}
         </p> 
